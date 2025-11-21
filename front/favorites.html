@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YNFT - Collections</title>
+    <title>YNFT - Favorites</title>
     <link rel="stylesheet" href="static/css/styles.css">
 </head>
 
@@ -18,8 +18,8 @@
             </a>
             <ul>
                 <li><a href="/">Home</a></li>
-                <li><a href="/collections" class="selected">Collections</a></li>
-                <li><a href="/favorites">Favorites</a></li>
+                <li><a href="/collections">Collections</a></li>
+                <li><a href="/favorites"  class="selected">Favorites</a></li>
                 <li><a href="/about">About</a></li>
                 <li><button class="login__btn">Connect</button></li>
             </ul>
@@ -27,55 +27,29 @@
     </header>
 
     <main>
-        <div class="collections container">
-            <div class="menu">
-                <div class="input">
-                    <img src="static/assets/search.svg" alt="">
-                    <input type="text" placeholder="Contract Adress">
-                </div>
-                <div class="choices input">
-                    Attributes
-                    <div class="input">
-                        <input type="checkbox" id="test1" name="test1" value="Test">
-                        <label for="test1"> Test</label>
-                    </div>
-                    <div class="input">
-                        <input type="checkbox" id="test2" name="test2" value="Test">
-                        <label for="test2"> Test</label>
-                    </div>
-                    <div class="input">
-                        <input type="checkbox" id="test3" name="test3" value="Test">
-                        <label for="test3"> Test</label>
-                    </div>
-                    <div class="input">
-                        <input type="checkbox" id="test4" name="test4" value="Test">
-                        <label for="test4"> Test</label>
-                    </div>
-                </div>
-                <input class="main__btn" type="submit" value="Submit">
-            </div>
+        <div class="collections fav container">
             <div class="items">
                 <a href="/item/:id" class="item">
                     <img src="https://artlogic-res.cloudinary.com/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-artlogicwebsite0889/usr/images/news/main_image/6/nft-bored-ape-yacht-club.png"
                         alt="nft">
                     <p>Name #72</p>
                 </a>
-                 <a href="/item/:id" class="item">
+                <a href="/item/:id" class="item">
                     <img src="https://artlogic-res.cloudinary.com/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-artlogicwebsite0889/usr/images/news/main_image/6/nft-bored-ape-yacht-club.png"
                         alt="nft">
                     <p>Name #72</p>
                 </a>
-                 <a href="/item/:id" class="item">
+                <a href="/item/:id" class="item">
                     <img src="https://artlogic-res.cloudinary.com/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-artlogicwebsite0889/usr/images/news/main_image/6/nft-bored-ape-yacht-club.png"
                         alt="nft">
                     <p>Name #72</p>
                 </a>
-                 <a href="/item/:id" class="item">
+                <a href="/item/:id" class="item">
                     <img src="https://artlogic-res.cloudinary.com/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-artlogicwebsite0889/usr/images/news/main_image/6/nft-bored-ape-yacht-club.png"
                         alt="nft">
                     <p>Name #72</p>
                 </a>
-                 <a href="/item/:id" class="item">
+                <a href="/item/:id" class="item">
                     <img src="https://artlogic-res.cloudinary.com/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-artlogicwebsite0889/usr/images/news/main_image/6/nft-bored-ape-yacht-club.png"
                         alt="nft">
                     <p>Name #72</p>
@@ -83,6 +57,7 @@
             </div>
         </div>
     </main>
+
 </body>
 
 </html>
