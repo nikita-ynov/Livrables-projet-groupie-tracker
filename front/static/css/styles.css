@@ -55,10 +55,24 @@ ul, li, a {
     background: var(--gray-color);
     padding: 12px 24px;
     border-radius: 34px;
+
 }
 
 .link {
     text-decoration: dashed;
+}
+
+.main__btn {
+    background: var(--red-color);
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 1rem 2rem;
+    border-radius: 34px;
+    transition: .3s;
+}
+
+.main__btn:hover {
+    transform: translateY(-3px);
 }
 
 /* HEADER */
@@ -100,6 +114,14 @@ header ul {
     box-shadow: rgb(0, 0, 0) 30px 30px 8px;
 }
 
-.hero .right p {
+.hero .right {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    min-height: 300px;
+}
+
+.hero .right .info p {
     margin-bottom: 1rem;
 }
