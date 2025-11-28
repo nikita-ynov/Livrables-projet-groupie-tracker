@@ -14,9 +14,9 @@ func InitRouter() *http.ServeMux {
 	// Route Index
 	mux.HandleFunc("/", controller.Home)
 	mux.HandleFunc("/collections", controller.Collections)
-	mux.HandleFunc("/favorites", controller.Id)
+	mux.HandleFunc("/favorites", controller.Favorites)
 	mux.HandleFunc("/about", controller.About)
-	mux.HandleFunc("/:id", controller.About)
+	mux.HandleFunc("/:id", controller.Id)
 
 	return mux
 }
