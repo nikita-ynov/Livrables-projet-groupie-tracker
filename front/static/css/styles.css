@@ -41,7 +41,9 @@ button {
 
 }
 
-ul, li, a {
+ul,
+li,
+a {
     text-decoration: none;
     list-style: none;
     color: var(--white-color);
@@ -177,6 +179,7 @@ header ul {
     margin-top: 1rem;
     display: flex;
 }
+
 .collections .items {
     display: flex;
     flex-wrap: wrap;
@@ -185,6 +188,7 @@ header ul {
     padding: 0 1rem;
 
 }
+
 .collections .items .item {
     width: calc(765px / 3 - 1.3rem);
     padding-bottom: 1rem;
@@ -192,9 +196,10 @@ header ul {
 }
 
 .fav .items .item {
-    width: calc(1000px / 4 - 1.3rem );
+    width: calc(1000px / 4 - 1.3rem);
 
 }
+
 .collections .items .item:hover {
     transform: translateY(-3px);
 }
@@ -215,4 +220,201 @@ header ul {
 
 .collections .items .item p button img {
     box-shadow: none;
+}
+
+/* PAGE NFT DETAILS (id.html) */
+
+.nft-page {
+    display: flex;
+    gap: 3rem;
+    margin-top: 3rem;
+    align-items: flex-start;
+    /* Keeps the left side sticky correctly */
+    padding-bottom: 3rem;
+}
+
+/* LEFT SIDE - Image & Basic Info */
+.nft-page .left {
+    flex: 1;
+    /* Takes up 1 fraction of space */
+    position: sticky;
+    /* Keeps image in view while scrolling traits */
+    top: 2rem;
+}
+
+.nft-image {
+    width: 100%;
+    border-radius: 16px;
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease;
+}
+
+.nft-image:hover {
+    transform: scale(1.02);
+}
+
+.nft-basic-info {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nft-basic-info h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.fav-btn {
+    color: var(--red-color);
+    border: 1px solid var(--gray-color);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background: var(--black-box);
+    transition: all 0.3s ease;
+}
+
+.fav-btn:hover {
+    background: var(--red-color);
+    color: var(--white-color);
+    border-color: var(--red-color);
+}
+
+/* RIGHT SIDE - Scrollable Content */
+.nft-page .right {
+    flex: 1.5;
+    /* Takes up slightly more space than the image */
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.nft-section {
+    background: var(--black-box);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--gray-color);
+}
+
+.nft-section h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--gray-color);
+    padding-bottom: 0.8rem;
+    color: var(--white-color);
+}
+
+.nft-section p {
+    color: #cccccc;
+    font-size: 0.95rem;
+    line-height: 1.6rem;
+}
+
+/* Details List Styling */
+.details-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--gray-color);
+    font-size: 0.9rem;
+}
+
+.details-list li:last-child {
+    border-bottom: none;
+}
+
+.details-list li strong {
+    color: var(--placeholder-color);
+}
+
+/* Attributes Grid Styling */
+.traits-grid {
+    display: grid;
+    /* Responsive columns that don't get too small */
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 12px;
+}
+
+.trait {
+    background: var(--gray-color);
+    /* Uses the transparent white */
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    border: 1px solid transparent;
+    transition: 0.3s;
+    cursor: default;
+}
+
+.trait:hover {
+    border-color: var(--red-color);
+    background: rgba(235, 88, 85, 0.1);
+    /* Slight red tint on hover */
+}
+
+.trait span {
+    font-size: 0.75rem;
+    color: var(--placeholder-color);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.trait:last-child {
+    color: var(--white-color);
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+/* Collection Info Styling */
+.collection-info {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.collection-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.collection-info ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    font-size: 0.9rem;
+}
+
+.collection-info ul li strong {
+    color: var(--placeholder-color);
+    margin-right: 5px;
+}
+
+/* RESPONSIVE (Mobile) */
+@media (max-width: 768px) {
+    .nft-page {
+        flex-direction: column;
+        margin-top: 1rem;
+        gap: 2rem;
+    }
+
+    .nft-page .left {
+        width: 100%;
+        position: relative;
+        top: 0;
+    }
+
+    .nft-page .right {
+        width: 100%;
+    }
+
+    .traits-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
