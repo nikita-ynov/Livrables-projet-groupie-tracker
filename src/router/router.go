@@ -2,17 +2,21 @@ package router
 
 import (
 	"net/http"
-	"nft/controller" 
+	"nft/controller"
 )
 
 func InitRouter() *http.ServeMux {
 	mux := http.NewServeMux()
-	
-	fileServer := http.FileServer(http.Dir("assets"))
-	mux.Handle("/assets/", http.StripPrefix("/assets/", fileServer))
+
+	fileServer := http.FileServer(http.Dir("static"))
+	mux.Handle("/static/", http.StripPrefix("/static/", fileServer))
 
 	// Route Index
-	mux.HandleFunc("/", controller.IndexHandler)
+	mux.HandleFunc("/", controller.Home)
+	mux.HandleFunc("/collections", controller.Collections)
+	mux.HandleFunc("/favorites", controller.Id)
+	mux.HandleFunc("/about", controller.About)
+	mux.HandleFunc("/:id", controller.About)
 
 	return mux
 }

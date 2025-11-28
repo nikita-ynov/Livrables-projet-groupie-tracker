@@ -1,20 +1,33 @@
 package controller
 
 import (
-	"html/template"
 	"net/http"
-	"path/filepath"
+	"nft/pages"
 )
 
-func IndexHandler(w http.ResponseWriter, r *http.Request) {
-
-	tmplPath := filepath.Join("tempales", "index.html")
-
-	tmpl, err := template.ParseFiles(tmplPath)
+func renderPage(w http.ResponseWriter, filename string, data any) {
+	err := pages.Temp.ExecuteTemplate(w, filename, data)
 	if err != nil {
-		http.Error(w, "Erreur lors du chargement de la page: "+err.Error(), http.StatusInternalServerError)
-		return
+		http.Error(w, "Erreur rendu template : "+err.Error(), http.StatusInternalServerError)
 	}
+}
 
-	tmpl.Execute(w, nil)
+func Home(w http.ResponseWriter, r *http.Request) {
+	renderPage(w, "index.html", nil)
+}
+
+func Collections(w http.ResponseWriter, r *http.Request) {
+	renderPage(w, "collections.html", nil)
+}
+
+func Id(w http.ResponseWriter, r *http.Request) {
+	renderPage(w, "id.html", nil)
+}
+
+func Favorites(w http.ResponseWriter, r *http.Request) {
+	renderPage(w, "favorites.html", nil)
+}
+
+func About(w http.ResponseWriter, r *http.Request) {
+	renderPage(w, "about.html", nil)
 }
