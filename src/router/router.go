@@ -17,7 +17,6 @@ func InitRouter() *mux.Router {
 	r.HandleFunc("/collections", controller.Collections)
 	r.HandleFunc("/favorites", controller.Favorites)
 	r.HandleFunc("/about", controller.About)
-	r.HandleFunc("/item/{id}", controller.Id)
-
+	r.HandleFunc("/item/{address}/{id}", controller.Id)
 	return r
 }

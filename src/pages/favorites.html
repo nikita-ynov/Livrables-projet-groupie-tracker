@@ -12,8 +12,7 @@
     <header>
         <div class="container">
             <a href="/" class="logo">
-                <img src="static/assets/logo.svg" alt="">
-                YNFT
+                <img src="static/assets/logo.svg" alt=""> YNFT
             </a>
             <ul>
                 <li><a href="/">Home</a></li>
@@ -27,36 +26,35 @@
 
     <main>
         <div class="collections fav container">
+            <h1>My Favorites</h1>
+            
             <div class="items">
-                <a href="/item/1" class="item">
-                    <img src="https://artlogic-res.cloudinary.com/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-artlogicwebsite0889/usr/images/news/main_image/6/nft-bored-ape-yacht-club.png"
-                        alt="nft">
-                    <p>Name #72</p>
+                {{if not .NFTs}}
+                    <div style="width:100%; text-align:center; padding: 50px;">
+                        <p>No favorites yet.</p>
+                        <a href="/collections" class="main__btn" style="display:inline-block; margin-top:10px;">Browse Collections</a>
+                    </div>
+                {{end}}
+
+                {{range .NFTs}}
+                <a href="/item/{{.Contract.Address}}/{{.Id.TokenId}}" class="item">
+                    {{if .Media}}
+                        <img src="{{ (index .Media 0).Gateway }}" alt="{{.Title}}" onerror="this.src='static/assets/placeholder.png'">
+                    {{else}}
+                        <img src="static/assets/placeholder.png" alt="No image">
+                    {{end}}
+                    
+                    <p>
+                        {{if .Title}}
+                            {{.Title}}
+                        {{else}}
+                            Item #{{.Id.TokenId}}
+                        {{end}}
+                    </p>
                 </a>
-                <a href="/item/2" class="item">
-                    <img src="https://artlogic-res.cloudinary.com/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-artlogicwebsite0889/usr/images/news/main_image/6/nft-bored-ape-yacht-club.png"
-                        alt="nft">
-                    <p>Name #72</p>
-                </a>
-                <a href="/item/3" class="item">
-                    <img src="https://artlogic-res.cloudinary.com/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-artlogicwebsite0889/usr/images/news/main_image/6/nft-bored-ape-yacht-club.png"
-                        alt="nft">
-                    <p>Name #72</p>
-                </a>
-                <a href="/item/4" class="item">
-                    <img src="https://artlogic-res.cloudinary.com/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-artlogicwebsite0889/usr/images/news/main_image/6/nft-bored-ape-yacht-club.png"
-                        alt="nft">
-                    <p>Name #72</p>
-                </a>
-                <a href="/item/5" class="item">
-                    <img src="https://artlogic-res.cloudinary.com/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-artlogicwebsite0889/usr/images/news/main_image/6/nft-bored-ape-yacht-club.png"
-                        alt="nft">
-                    <p>Name #72</p>
-                </a>
+                {{end}}
             </div>
         </div>
     </main>
-
 </body>
-
 </html>

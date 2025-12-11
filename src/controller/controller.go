@@ -6,6 +6,8 @@ import (
 	"io"
 	"net/http"
 	"nft/pages"
+	"strings"
+	"sync"
 
 	"github.com/gorilla/mux"
 )
@@ -81,6 +83,34 @@ func fetchNFTsForCollection(contractAddress string) ([]NFT, error) {
 	return response.NFTs, nil
 }
 
+func fetchNFTMetadata(contractAddress, tokenId string) (*NFT, error) {
+	url := fmt.Sprintf("https://eth-mainnet.g.alchemy.com/nft/v2/%s/getNFTMetadata?contractAddress=%s&tokenId=%s", apiKey, contractAddress, tokenId)
+
+	req, _ := http.NewRequest("GET", url, nil)
+	req.Header.Add("accept", "application/json")
+
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	if res.StatusCode != 200 {
+		return nil, fmt.Errorf("status %d", res.StatusCode)
+	}
+
+	body, _ := io.ReadAll(res.Body)
+
+	var nft NFT
+	if err := json.Unmarshal(body, &nft); err != nil {
+		return nil, err
+	}
+	nft.Id.TokenId = tokenId
+	nft.Contract.Address = contractAddress
+
+	return &nft, nil
+}
+
 func extractFilters(nfts []NFT) map[string][]string {
 	tempMap := make(map[string]map[string]bool)
 
@@ -142,13 +172,62 @@ func Collections(w http.ResponseWriter, r *http.Request) {
 
 func Id(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
+	address := vars["address"]
 	id := vars["id"]
-	fmt.Println("Item ID = " + id)
-	renderPage(w, "id.html", nil)
+
+	nft, err := fetchNFTMetadata(address, id)
+
+	data := map[string]interface{}{
+		"NFT":   nft,
+		"Error": "",
+	}
+
+	if err != nil {
+		data["Error"] = "Impossible de charger le NFT : " + err.Error()
+	}
+
+	renderPage(w, "id.html", data)
 }
 
 func Favorites(w http.ResponseWriter, r *http.Request) {
-	renderPage(w, "favorites.html", nil)
+	// 1. Lire le cookie "favorites"
+	cookie, err := r.Cookie("ynft_favorites")
+	var favNFTs []NFT
+	errorMsg := ""
+
+	if err == nil && cookie.Value != "" {
+		pairs := strings.Split(cookie.Value, ",")
+
+		var wg sync.WaitGroup
+		var mu sync.Mutex
+
+		for _, pair := range pairs {
+			parts := strings.Split(pair, ":")
+			if len(parts) != 2 {
+				continue
+			}
+			addr, id := parts[0], parts[1]
+
+			wg.Add(1)
+			go func(a, i string) {
+				defer wg.Done()
+				nft, err := fetchNFTMetadata(a, i)
+				if err == nil {
+					mu.Lock()
+					favNFTs = append(favNFTs, *nft)
+					mu.Unlock()
+				}
+			}(addr, id)
+		}
+		wg.Wait()
+	}
+
+	data := PageData{
+		NFTs:  favNFTs,
+		Error: errorMsg,
+	}
+
+	renderPage(w, "favorites.html", data)
 }
 
 func About(w http.ResponseWriter, r *http.Request) {
