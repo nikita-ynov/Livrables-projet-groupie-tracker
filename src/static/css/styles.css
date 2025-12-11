@@ -31,6 +31,11 @@ body {
     margin: auto;
 }
 
+.collContainer {
+    margin: auto;
+    padding: 0 50px;
+}
+
 button {
     cursor: pointer;
     border: none;
@@ -256,6 +261,7 @@ header ul li a.selected {
 
 /* PAGE COLLECTIONS collections.html */
 
+
 .collections {
     display: flex;
     gap: 2rem;
@@ -264,18 +270,40 @@ header ul li a.selected {
     padding-bottom: 3rem;
 }
 
+.bigSearch {
+    width: 100%;
+    margin-top: 30vh;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-left: 10rem;
+    gap: 3rem;
+}
+.bigSearch h2 {
+    font-size: 3rem;
+}
+
+.bigSearch form {
+    max-width: 500px;
+}
+
+
+.bigSearch form input {
+    min-width: 95%;
+}
+
 .menu {
     width: 280px;
-    background: var(--black-box);
-    padding: 1.5rem;
+    /* background: var(--black-box); */
+    /* padding: 1.5rem; */
     border-radius: 16px;
-    border: 1px solid var(--gray-color);
+    /* border: 1px solid var(--gray-color); */
     position: sticky;
     top: 6rem;
     height: fit-content;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    /* gap: 1.5rem; */
 }
 
 .menu>.input {
@@ -429,7 +457,10 @@ header ul li a.selected {
     margin-top: 1.5rem;
     display: flex;
     justify-content: space-between;
+    flex-direction: column;
     align-items: center;
+    min-width: 250px;
+    gap: 1rem;
 }
 
 .nft-basic-info h1 {

@@ -42,7 +42,19 @@
     </header>
 
     <main>
-        <div class="collections container">
+        <div class="collections collContainer">
+            {{if not .SearchQuery}}
+            <div class="bigSearch">
+                <h2>Search Collection</h2>
+                <form action="/collections" method="GET" class="input" >
+                    <img src="static/assets/search.svg" alt="">
+                    <input type="text" name="address" placeholder="Contract Address (0x...)" value="{{.SearchQuery}}">
+                    <button type="submit" style="display:none;"></button>
+                </form>
+            </div>
+            {{end}}
+
+            {{if .SearchQuery}}
             <div class="menu">
                 <form action="/collections" method="GET" class="input" style="margin-bottom: 20px;">
                     <img src="static/assets/search.svg" alt="">
@@ -54,11 +66,11 @@
                     <h3>Filters</h3>
 
                     {{if .Error}}
-                        <p style="color: red; font-size: 0.8rem;">{{.Error}}</p>
+                    <p style="color: red; font-size: 0.8rem;">{{.Error}}</p>
                     {{end}}
 
                     {{if not .Filters}}
-                        <p style="font-size: 0.8rem; color: #aaa;">Enter a valid address to load filters.</p>
+                    <p style="font-size: 0.8rem; color: #aaa;">Enter a valid address to load filters.</p>
                     {{end}}
 
                     {{range $traitType, $values := .Filters}}
@@ -81,12 +93,13 @@
                     {{end}}
                 </div>
             </div>
+            {{end}}
 
             <div class="items">
                 {{if not .NFTs}}
-                    {{if .SearchQuery}}
-                        <p>No NFTs found.</p>
-                    {{end}}
+                {{if .SearchQuery}}
+                <p>No NFTs found.</p>
+                {{end}}
                 {{end}}
 
                 {{range .NFTs}}
@@ -97,9 +110,10 @@
                     {{end}}
                 }'>
                     {{if .Media}}
-                        <img src="{{ (index .Media 0).Gateway }}" alt="{{.Title}}" onerror="this.src='static/assets/placeholder.png'">
+                    <img src="{{ (index .Media 0).Gateway }}" alt="{{.Title}}"
+                        onerror="this.src='static/assets/placeholder.png'">
                     {{else}}
-                        <img src="static/assets/placeholder.png" alt="No image">
+                    <img src="static/assets/placeholder.png" alt="No image">
                     {{end}}
                     <p>{{if .Title}}{{.Title}}{{else}}#{{.Id.TokenId}}{{end}}</p>
                 </a>
@@ -141,7 +155,7 @@
                 items.forEach(item => {
                     let metadataRaw = item.dataset.metadata;
                     let nftTraits = {};
-                    
+
                     try {
                         nftTraits = JSON.parse(metadataRaw);
                     } catch (e) {
@@ -152,8 +166,8 @@
                     let isVisible = true;
 
                     for (const [traitType, selectedValues] of Object.entries(activeFilters)) {
-                        const nftValue = String(nftTraits[traitType]); 
-                        
+                        const nftValue = String(nftTraits[traitType]);
+
                         if (!selectedValues.includes(nftValue)) {
                             isVisible = false;
                             break;
@@ -174,4 +188,5 @@
         });
     </script>
 </body>
+
 </html>
