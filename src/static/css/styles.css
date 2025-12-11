@@ -468,6 +468,10 @@ header ul li a.selected {
     font-weight: 700;
 }
 
+.fav {
+    flex-direction: column;
+}
+
 .fav-btn {
     color: var(--red-color);
     border: 1px solid var(--gray-color);
