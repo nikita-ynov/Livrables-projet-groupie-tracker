@@ -3,20 +3,21 @@ package router
 import (
 	"net/http"
 	"nft/controller"
+
+	"github.com/gorilla/mux"
 )
 
-func InitRouter() *http.ServeMux {
-	mux := http.NewServeMux()
-
-	fileServer := http.FileServer(http.Dir("static"))
-	mux.Handle("/static/", http.StripPrefix("/static/", fileServer))
+func InitRouter() *mux.Router {
+	r := mux.NewRouter()
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/",
+		http.FileServer(http.Dir("static"))))
 
 	// Route Index
-	mux.HandleFunc("/", controller.Home)
-	mux.HandleFunc("/collections", controller.Collections)
-	mux.HandleFunc("/favorites", controller.Favorites)
-	mux.HandleFunc("/about", controller.About)
-	mux.HandleFunc("/:id", controller.Id)
+	r.HandleFunc("/", controller.Home)
+	r.HandleFunc("/collections", controller.Collections)
+	r.HandleFunc("/favorites", controller.Favorites)
+	r.HandleFunc("/about", controller.About)
+	r.HandleFunc("/item/{id}", controller.Id)
 
-	return mux
+	return r
 }

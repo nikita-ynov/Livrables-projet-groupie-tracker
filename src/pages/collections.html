@@ -6,15 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YNFT - Collections</title>
     <link rel="stylesheet" href="static/css/styles.css">
+    <style>
+        /* Un peu de style pour les filtres */
+        .filter-group {
+            margin-bottom: 15px;
+        }
+
+        .filter-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+            color: #fff;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- header du site, maitre en templates -->
     <header>
         <div class="container">
             <a href="/" class="logo">
-                <img src="static/assets/logo.svg" alt="">
-                YNFT
+                <img src="static/assets/logo.svg" alt=""> YNFT
             </a>
             <ul>
                 <li><a href="/">Home</a></li>
@@ -29,60 +44,134 @@
     <main>
         <div class="collections container">
             <div class="menu">
-                <div class="input">
+                <form action="/collections" method="GET" class="input" style="margin-bottom: 20px;">
                     <img src="static/assets/search.svg" alt="">
-                    <input type="text" placeholder="Contract Adress">
-                </div>
+                    <input type="text" name="address" placeholder="Contract Address (0x...)" value="{{.SearchQuery}}">
+                    <button type="submit" style="display:none;"></button>
+                </form>
+
                 <div class="choices input">
-                    Attributes
-                    <div class="input">
-                        <input type="checkbox" id="test1" name="test1" value="Test">
-                        <label for="test1"> Test</label>
+                    <h3>Filters</h3>
+
+                    {{if .Error}}
+                        <p style="color: red; font-size: 0.8rem;">{{.Error}}</p>
+                    {{end}}
+
+                    {{if not .Filters}}
+                        <p style="font-size: 0.8rem; color: #aaa;">Enter a valid address to load filters.</p>
+                    {{end}}
+
+                    {{range $traitType, $values := .Filters}}
+                    <div class="filter-group">
+                        <div class="filter-header">
+                            <span>{{$traitType}}</span>
+                            <span class="arrow">▼</span>
+                        </div>
+
+                        <div class="filter-content">
+                            {{range $values}}
+                            <div class="input">
+                                <input type="checkbox" class="filter-checkbox" id="{{$traitType}}-{{.}}"
+                                    data-trait-type="{{$traitType}}" data-trait-value="{{.}}">
+                                <label for="{{$traitType}}-{{.}}"> {{.}}</label>
+                            </div>
+                            {{end}}
+                        </div>
                     </div>
-                    <div class="input">
-                        <input type="checkbox" id="test2" name="test2" value="Test">
-                        <label for="test2"> Test</label>
-                    </div>
-                    <div class="input">
-                        <input type="checkbox" id="test3" name="test3" value="Test">
-                        <label for="test3"> Test</label>
-                    </div>
-                    <div class="input">
-                        <input type="checkbox" id="test4" name="test4" value="Test">
-                        <label for="test4"> Test</label>
-                    </div>
+                    {{end}}
                 </div>
-                <input class="main__btn" type="submit" value="Submit">
             </div>
+
             <div class="items">
-                <a href="/item/:id" class="item">
-                    <img src="https://artlogic-res.cloudinary.com/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-artlogicwebsite0889/usr/images/news/main_image/6/nft-bored-ape-yacht-club.png"
-                        alt="nft">
-                    <p>Name #72</p>
+                {{if not .NFTs}}
+                    {{if .SearchQuery}}
+                        <p>No NFTs found.</p>
+                    {{end}}
+                {{end}}
+
+                {{range .NFTs}}
+                <a href="/item/{{.Contract.Address}}/{{.Id.TokenId}}" class="item nft-card" data-metadata='{
+                    {{range $i, $a := .Metadata.Attributes}}
+                        {{if $i}},{{end}}
+                        "{{$a.TraitType}}": "{{$a.Value}}"
+                    {{end}}
+                }'>
+                    {{if .Media}}
+                        <img src="{{ (index .Media 0).Gateway }}" alt="{{.Title}}" onerror="this.src='static/assets/placeholder.png'">
+                    {{else}}
+                        <img src="static/assets/placeholder.png" alt="No image">
+                    {{end}}
+                    <p>{{if .Title}}{{.Title}}{{else}}#{{.Id.TokenId}}{{end}}</p>
                 </a>
-                 <a href="/item/:id" class="item">
-                    <img src="https://artlogic-res.cloudinary.com/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-artlogicwebsite0889/usr/images/news/main_image/6/nft-bored-ape-yacht-club.png"
-                        alt="nft">
-                    <p>Name #72</p>
-                </a>
-                 <a href="/item/:id" class="item">
-                    <img src="https://artlogic-res.cloudinary.com/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-artlogicwebsite0889/usr/images/news/main_image/6/nft-bored-ape-yacht-club.png"
-                        alt="nft">
-                    <p>Name #72</p>
-                </a>
-                 <a href="/item/:id" class="item">
-                    <img src="https://artlogic-res.cloudinary.com/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-artlogicwebsite0889/usr/images/news/main_image/6/nft-bored-ape-yacht-club.png"
-                        alt="nft">
-                    <p>Name #72</p>
-                </a>
-                 <a href="/item/:id" class="item">
-                    <img src="https://artlogic-res.cloudinary.com/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-artlogicwebsite0889/usr/images/news/main_image/6/nft-bored-ape-yacht-club.png"
-                        alt="nft">
-                    <p>Name #72</p>
-                </a>
+                {{end}}
             </div>
         </div>
     </main>
-</body>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- 1. LOGIQUE ACCORDÉON ---
+            const headers = document.querySelectorAll('.filter-header');
+
+            headers.forEach(header => {
+                header.addEventListener('click', () => {
+                    header.classList.toggle('active');
+                    const content = header.nextElementSibling;
+                    content.classList.toggle('open');
+                });
+            });
+
+            // --- 2. LOGIQUE DE FILTRAGE ---
+            const checkboxes = document.querySelectorAll('.filter-checkbox');
+            const items = document.querySelectorAll('.nft-card');
+
+            function filterNFTs() {
+                const activeFilters = {};
+
+                checkboxes.forEach(cb => {
+                    if (cb.checked) {
+                        const type = cb.dataset.traitType;
+                        const value = cb.dataset.traitValue;
+                        if (!activeFilters[type]) activeFilters[type] = [];
+                        activeFilters[type].push(value);
+                    }
+                });
+
+                items.forEach(item => {
+                    let metadataRaw = item.dataset.metadata;
+                    let nftTraits = {};
+                    
+                    try {
+                        nftTraits = JSON.parse(metadataRaw);
+                    } catch (e) {
+                        console.error("Erreur parsing JSON pour un NFT", e);
+                        return;
+                    }
+
+                    let isVisible = true;
+
+                    for (const [traitType, selectedValues] of Object.entries(activeFilters)) {
+                        const nftValue = String(nftTraits[traitType]); 
+                        
+                        if (!selectedValues.includes(nftValue)) {
+                            isVisible = false;
+                            break;
+                        }
+                    }
+
+                    if (isVisible) {
+                        item.classList.remove('hidden');
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+            }
+
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', filterNFTs);
+            });
+        });
+    </script>
+</body>
 </html>

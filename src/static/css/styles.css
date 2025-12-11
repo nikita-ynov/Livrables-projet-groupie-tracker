@@ -21,8 +21,8 @@ body {
     color: var(--white-color);
 
     line-height: 1.5rem;
-
 }
+
 
 /* MAIN */
 
@@ -304,6 +304,9 @@ header ul li a.selected {
     gap: 0.5rem;
     background: transparent;
     padding: 0;
+
+    overflow-y: scroll;
+    max-height: 500px;
 }
 
 .choices .input {
@@ -563,5 +566,51 @@ header ul li a.selected {
 .collection-info ul li strong {
     color: var(--placeholder-color);
     margin-right: 5px;
+}
+
+/* Filtre */
+.filter-group {
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.filter-header {
+    font-weight: bold;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    cursor: pointer;
+    user-select: none;
+}
+
+.filter-header:hover {
+    color: #ccc;
+}
+
+.arrow {
+    font-size: 0.8em;
+    transition: transform 0.3s ease;
+}
+
+.filter-header.active .arrow {
+    transform: rotate(180deg);
+}
+
+.filter-content {
+    display: none;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.filter-content.open {
+    display: block;
+}
+
+.hidden {
+    display: none !important;
 }
 
