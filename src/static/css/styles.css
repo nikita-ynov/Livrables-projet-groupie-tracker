@@ -443,7 +443,8 @@ header ul li a.selected {
 }
 
 .nft-image {
-    width: 100%;
+    width: 300px;
+
     border-radius: 16px;
     box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.5);
     transition: transform 0.3s ease;
@@ -466,6 +467,8 @@ header ul li a.selected {
 .nft-basic-info h1 {
     font-size: 1.8rem;
     font-weight: 700;
+    max-width: 300px;
+    overflow: hidden;
 }
 
 .fav {
