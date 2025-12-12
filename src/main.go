@@ -3,17 +3,19 @@ package main
 import (
 	"fmt"
 	"net/http"
-	initTemp "nft/pages"
+	"nft/database"
 	"nft/router"
 )
 
 func main() {
-	initTemp.Init()
-	// ... le reste ne change pas
-	mux := router.InitRouter()
+	// 1. Démarrer la base de données
+	database.InitDB()
 
-	port := ":8080"
-	fmt.Printf("Serveur lancé sur http://localhost%s\n", port)
+	// 2. Configurer les routes
+	r := router.InitRouter()
 
-	http.ListenAndServe(port, mux)
+	fmt.Println("🚀 Serveur lancé sur http://localhost:8080")
+
+	// 3. Lancer le serveur
+	http.ListenAndServe(":8080", r)
 }

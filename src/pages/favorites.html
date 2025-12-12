@@ -5,56 +5,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YNFT - Favorites</title>
-    <link rel="stylesheet" href="static/css/styles.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 
 <body>
     <header>
         <div class="container">
             <a href="/" class="logo">
-                <img src="static/assets/logo.svg" alt=""> YNFT
+                <img src="/static/assets/logo.svg" alt=""> YNFT
             </a>
             <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/collections">Collections</a></li>
-                <li><a href="/favorites" class="selected">Favorites</a></li>
-                <li><a href="/about">About</a></li>
-                <li><button class="login__btn">Connect</button></li>
+                <li><a href="/" class="{{if eq .CurrentPage "home"}}selected{{end}}">Home</a></li>
+                <li><a href="/collections" class="{{if eq .CurrentPage "collections"}}selected{{end}}">Collections</a></li>
+                <li><a href="/favorites" class="{{if eq .CurrentPage "favorites"}}selected{{end}}">Favorites</a></li>
+                <li><a href="/about" class="{{if eq .CurrentPage "about"}}selected{{end}}">About</a></li>
+                
+                {{if .UserAddress}}
+                    <li>
+                        <div class="user-addr-container">
+                            <span class="user-addr">● {{.UserAddress}}</span>
+                            <a href="/logout" class="logout-btn" title="Disconnect">×</a>
+                        </div>
+                    </li>
+                {{else}}
+                    <li><a href="/login/test" class="discord-btn">Discord Test</a></li>
+                    <li><button class="login__btn">Connect</button></li>
+                {{end}}
             </ul>
         </div>
     </header>
 
     <main>
-        <div class="collections fav container">
-            <h1>My Favorites</h1>
+        <div class="container" style="padding-top: 2rem;">
             
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px;">
+                <h1 style="font-size: 2rem;">My Favorites <span style="color: #eb5855;">Collection</span></h1>
+                
+                {{if .NFTs}}
+                    <span style="background: #333; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem;">
+                        {{len .NFTs}} Items
+                    </span>
+                {{end}}
+            </div>
+
+            {{if .Error}}
+                <div style="background: rgba(235, 88, 85, 0.1); border: 1px solid #eb5855; padding: 20px; border-radius: 10px; text-align: center; margin-top: 50px;">
+                    <h3 style="color: #eb5855; margin-bottom: 10px;">Connection Required</h3>
+                    <p>{{.Error}}</p>
+                </div>
+            {{else}}
+
             <div class="items">
                 {{if not .NFTs}}
-                    <div style="width:100%; text-align:center; padding: 50px;">
-                        <p>No favorites yet.</p>
-                        <a href="/collections" class="main__btn" style="display:inline-block; margin-top:10px;">Browse Collections</a>
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 80px 20px; background: #1e1e1e; border-radius: 16px; border: 1px dashed #333;">
+                        <img src="/static/assets/placeholder.png" alt="Empty" style="width: 80px; opacity: 0.3; margin-bottom: 20px; border-radius: 10px;">
+                        <h3 style="margin-bottom: 10px;">No favorites yet</h3>
+                        <p style="color: #888; margin-bottom: 25px;">Start exploring collections and heart the items you love!</p>
+                        <a href="/collections" class="main__btn">Browse Collections</a>
                     </div>
                 {{end}}
 
                 {{range .NFTs}}
                 <a href="/item/{{.Contract.Address}}/{{.Id.TokenId}}" class="item">
                     {{if .Media}}
-                        <img src="{{ (index .Media 0).Gateway }}" alt="{{.Title}}" onerror="this.src='static/assets/placeholder.png'">
+                        <img src="{{ (index .Media 0).Gateway }}" alt="{{.Title}}" onerror="this.src='/static/assets/placeholder.png'">
                     {{else}}
-                        <img src="static/assets/placeholder.png" alt="No image">
+                        <img src="/static/assets/placeholder.png" alt="No image">
                     {{end}}
                     
-                    <p>
-                        {{if .Title}}
-                            {{.Title}}
-                        {{else}}
-                            Item #{{.Id.TokenId}}
-                        {{end}}
+                    <p style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                            {{if .Title}}{{.Title}}{{else}}Item #{{.Id.TokenId}}{{end}}
+                        </span>
+                        <span style="color: #eb5855;">❤️</span>
                     </p>
                 </a>
                 {{end}}
             </div>
+            {{end}}
         </div>
     </main>
+
+    <script type="module" src="/static/js/wallet.js"></script>
 </body>
 </html>

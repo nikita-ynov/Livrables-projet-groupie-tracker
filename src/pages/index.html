@@ -1,28 +1,36 @@
-{{define "index.html"}}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YNFT</title>
-    <link rel="stylesheet" href="static/css/styles.css">
+    <title>YNFT - Home</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 
 <body>
-    <!-- header du site, maitre en templates -->
     <header>
         <div class="container">
             <a href="/" class="logo">
-                <img src="static/assets/logo.svg" alt="">
-                YNFT
+                <img src="/static/assets/logo.svg" alt=""> YNFT
             </a>
             <ul>
-                <li><a href="/" class="selected">Home</a></li>
-                <li><a href="/collections">Collections</a></li>
-                <li><a href="/favorites">Favorites</a></li>
-                <li><a href="/about">About</a></li>
-                <li><button class="login__btn">Connect</button></li>
+                <li><a href="/" class="{{if eq .CurrentPage "home"}}selected{{end}}">Home</a></li>
+                <li><a href="/collections" class="{{if eq .CurrentPage "collections"}}selected{{end}}">Collections</a></li>
+                <li><a href="/favorites" class="{{if eq .CurrentPage "favorites"}}selected{{end}}">Favorites</a></li>
+                <li><a href="/about" class="{{if eq .CurrentPage "about"}}selected{{end}}">About</a></li>
+                
+                {{if .UserAddress}}
+                    <li>
+                        <div class="user-addr-container">
+                            <span class="user-addr">● {{.UserAddress}}</span>
+                            <a href="/logout" class="logout-btn" title="Disconnect">×</a>
+                        </div>
+                    </li>
+                {{else}}
+                    <li><a href="/login/test" class="discord-btn">Discord Test</a></li>
+                    <li><button class="login__btn">Connect</button></li>
+                {{end}}
             </ul>
         </div>
     </header>
@@ -30,26 +38,22 @@
     <main>
         <div class="hero container">
             <div class="left">
-                <img src="https://artlogic-res.cloudinary.com/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-artlogicwebsite0889/usr/images/news/main_image/6/nft-bored-ape-yacht-club.png"
-                    alt="nft">
+                <img src="https://i.seadn.io/gae/Ju9CkWtV-1Okvf45wo8UctR-M9He2PjILP0oOvxE89AyiPPGtrR3gysu1Zgy0hjd2xKIgjJJtWIc0ybj4Vd7wv8t3pxDGHoJBzDB?auto=format&w=1000" 
+                     alt="NFT Art">
             </div>
             <div class="right">
                 <div class="info">
-                    <p><a target="_blank" href="https://fr.wikipedia.org/wiki/NFT" class="selected">NFT</a> - Certificat
-                        cryptographique associé à un objet numérique (image,
-                        vidéo, musique…) dont l'authenticité et la traçabilité sont garanties par la blockchain.</p>
-
-                    <p><a target="_blank" href="https://www.alchemy.com/" class="selected link">API ALCHEMY</a> - une
-                        plateforme conçue pour faciliter le développement et le déploiement d'applications Web3 sur des
-                        blockchains compatibles EVM. <a target="_blank" href="https://www.alchemy.com/docs/">Doc.</a></p>
-                    <p><a class="selected" target="_blank" href="https://www.figma.com/design/kCw2bogQvab5Rvsnsf9nrD/Practial-NFT-Gallery-UI--Community-?node-id=0-115&t=US3Qk6E62ny5pzk4-0">Figma Design</a></p>
+                    <h1>Discover, Collect, & Sell <br> <span style="color: #eb5855;">Extraordinary</span> NFTs</h1>
+                    <p>
+                        The leading NFT Marketplace on Ethereum. Home to the next generation of digital creators. 
+                        Discover the best NFT collections.
+                    </p>
                 </div>
-                <a href="/collections" class="main__btn">Collections</a>
+                <a href="/collections" class="main__btn">Explore Collections</a>
             </div>
         </div>
     </main>
 
+    <script type="module" src="/static/js/wallet.js"></script>
 </body>
-
 </html>
-{{end}}

@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{if .NFT.Title}}{{.NFT.Title}}{{else}}Item #{{.NFT.Id.TokenId}}{{end}}</title>
-    <link rel="stylesheet" href="/static/css/styles.css"> </head>
+    <link rel="stylesheet" href="/static/css/styles.css"> 
+</head>
 
 <body>
     <header>
@@ -14,11 +15,22 @@
                 <img src="/static/assets/logo.svg" alt=""> YNFT
             </a>
             <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/collections">Collections</a></li>
-                <li><a href="/favorites">Favorites</a></li>
-                <li><a href="/about">About</a></li>
-                <li><button class="login__btn">Connect</button></li>
+                <li><a href="/" class="{{if eq .CurrentPage "home"}}selected{{end}}">Home</a></li>
+                <li><a href="/collections" class="{{if eq .CurrentPage "collections"}}selected{{end}}">Collections</a></li>
+                <li><a href="/favorites" class="{{if eq .CurrentPage "favorites"}}selected{{end}}">Favorites</a></li>
+                <li><a href="/about" class="{{if eq .CurrentPage "about"}}selected{{end}}">About</a></li>
+                
+                {{if .UserAddress}}
+                    <li>
+                        <div class="user-addr-container">
+                            <span class="user-addr">● {{.UserAddress}}</span>
+                            <a href="/logout" class="logout-btn" title="Disconnect">×</a>
+                        </div>
+                    </li>
+                {{else}}
+                    <li><a href="/login/test" class="discord-btn">Discord Test</a></li>
+                    <li><button class="login__btn">Connect</button></li>
+                {{end}}
             </ul>
         </div>
     </header>
@@ -40,10 +52,16 @@
                 <div class="nft-basic-info">
                     <h1>{{if .NFT.Title}}{{.NFT.Title}}{{else}}#{{.NFT.Id.TokenId}}{{end}}</h1>
                     
-                    <button class="fav-btn" id="favBtn" 
+                    <button class="fav-btn {{if .IsFavorite}}active{{end}}" id="favBtn" 
                             data-address="{{.NFT.Contract.Address}}" 
-                            data-id="{{.NFT.Id.TokenId}}">
-                        ★ Add to Favorites
+                            data-id="{{.NFT.Id.TokenId}}"
+                            data-image="{{if .NFT.Media}}{{ (index .NFT.Media 0).Gateway }}{{end}}"
+                            data-title="{{.NFT.Title}}">
+                        {{if .IsFavorite}}
+                            ★ Remove from Favorites
+                        {{else}}
+                            ★ Add to Favorites
+                        {{end}}
                     </button>
                 </div>
             </div>
@@ -86,45 +104,46 @@
     </main>
 
     <script>
-        const favBtn = document.getElementById('favBtn');
-        const address = favBtn.dataset.address;
-        const id = favBtn.dataset.id;
-        const cookieName = "ynft_favorites";
-        const uniqueKey = address + ":" + id;
+        document.addEventListener('DOMContentLoaded', () => {
+            const favBtn = document.getElementById('favBtn');
+            if(favBtn) {
+                favBtn.addEventListener('click', async () => {
+                    const payload = {
+                        contract_address: favBtn.dataset.address,
+                        token_id: favBtn.dataset.id,
+                        image_url: favBtn.dataset.image,
+                        title: favBtn.dataset.title
+                    };
 
-        function getFavCookie() {
-            const match = document.cookie.match(new RegExp('(^| )' + cookieName + '=([^;]+)'));
-            return match ? match[2] : "";
-        }
+                    try {
+                        const response = await fetch('/api/favorite', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
 
-        function setFavCookie(value) {
-            document.cookie = `${cookieName}=${value}; path=/; max-age=${60*60*24*30}`;
-        }
+                        if (response.status === 401) {
+                            alert("Please connect your wallet first!");
+                            return;
+                        }
 
-        let currentFavs = getFavCookie();
-        if (currentFavs.includes(uniqueKey)) {
-            favBtn.textContent = "★ Remove from Favorites";
-            favBtn.classList.add("active"); 
-        }
-
-        favBtn.addEventListener('click', () => {
-            currentFavs = getFavCookie();
-            let favArray = currentFavs ? currentFavs.split(',') : [];
-
-            if (favArray.includes(uniqueKey)) {
-                // RETIRER
-                favArray = favArray.filter(item => item !== uniqueKey);
-                favBtn.textContent = "★ Add to Favorites";
-                favBtn.classList.remove("active");
-            } else {
-                // AJOUTER
-                favArray.push(uniqueKey);
-                favBtn.textContent = "★ Remove from Favorites";
-                favBtn.classList.add("active");
+                        const text = await response.text();
+                        
+                        if (text === "added") {
+                            favBtn.textContent = "★ Remove from Favorites";
+                            favBtn.classList.add("active");
+                        } else if (text === "removed") {
+                            favBtn.textContent = "★ Add to Favorites";
+                            favBtn.classList.remove("active");
+                        }
+                    } catch (error) {
+                        console.error("Erreur API:", error);
+                    }
+                });
             }
-
-            setFavCookie(favArray.join(','));
         });
     </script>
+
+    <script type="module" src="/static/js/wallet.js"></script>
 </body>
 </html>

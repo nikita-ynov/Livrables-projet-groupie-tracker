@@ -652,3 +652,87 @@ header ul li a.selected {
     display: none !important;
 }
 
+/* --- AJOUTS POUR LE LOGIN --- */
+
+.login__btn {
+    background: var(--gray-color); /* Fond gris par défaut */
+    color: var(--white-color);
+    padding: 10px 20px;
+    border-radius: 34px;
+    font-family: "Orbitron", sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    
+    /* Pour aligner le texte si besoin */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login__btn:hover {
+    background: rgba(255, 255, 255, 0.2); /* Légèrement plus clair au survol */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+/* --- NOUVEAUX STYLES HEADER --- */
+
+/* Bouton Discord */
+.discord-btn {
+    background-color: #5865F2;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 34px; /* Même arrondi que le bouton Connect */
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: background 0.3s;
+}
+.discord-btn:hover {
+    background-color: #4752c4;
+}
+
+/* Affichage de l'adresse utilisateur */
+.user-addr-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #2a2a2a;
+    padding: 5px 5px 5px 15px;
+    border-radius: 34px;
+    border: 1px solid #444;
+}
+
+.user-addr {
+    color: #4cd137; /* Vert matrix */
+    font-family: monospace;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+/* Petit bouton de déconnexion (Croix ou texte) */
+.logout-btn {
+    background: #eb5855;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.2rem;
+    transition: transform 0.2s;
+    text-decoration: none;
+    line-height: 1;
+}
+
+.logout-btn:hover {
+    background: #c0392b;
+    transform: scale(1.1);
+}

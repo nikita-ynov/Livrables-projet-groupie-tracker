@@ -5,38 +5,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YNFT - Collections</title>
-    <link rel="stylesheet" href="static/css/styles.css">
-    <style>
-        /* Un peu de style pour les filtres */
-        .filter-group {
-            margin-bottom: 15px;
-        }
-
-        .filter-title {
-            font-weight: bold;
-            margin-bottom: 5px;
-            display: block;
-            color: #fff;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 
 <body>
     <header>
         <div class="container">
             <a href="/" class="logo">
-                <img src="static/assets/logo.svg" alt=""> YNFT
+                <img src="/static/assets/logo.svg" alt=""> YNFT
             </a>
             <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/collections" class="selected">Collections</a></li>
-                <li><a href="/favorites">Favorites</a></li>
-                <li><a href="/about">About</a></li>
-                <li><button class="login__btn">Connect</button></li>
+                <li><a href="/" class="{{if eq .CurrentPage "home"}}selected{{end}}">Home</a></li>
+                <li><a href="/collections" class="{{if eq .CurrentPage "collections"}}selected{{end}}">Collections</a></li>
+                <li><a href="/favorites" class="{{if eq .CurrentPage "favorites"}}selected{{end}}">Favorites</a></li>
+                <li><a href="/about" class="{{if eq .CurrentPage "about"}}selected{{end}}">About</a></li>
+                
+                {{if .UserAddress}}
+                    <li>
+                        <div class="user-addr-container">
+                            <span class="user-addr">● {{.UserAddress}}</span>
+                            <a href="/logout" class="logout-btn" title="Disconnect">×</a>
+                        </div>
+                    </li>
+                {{else}}
+                    <li><a href="/login/test" class="discord-btn">Discord Test</a></li>
+                    <li><button class="login__btn">Connect</button></li>
+                {{end}}
             </ul>
         </div>
     </header>
@@ -47,7 +41,7 @@
             <div class="bigSearch">
                 <h2>Search Collection</h2>
                 <form action="/collections" method="GET" class="input" >
-                    <img src="static/assets/search.svg" alt="">
+                    <img src="/static/assets/search.svg" alt="">
                     <input type="text" name="address" placeholder="Contract Address (0x...)" value="{{.SearchQuery}}">
                     <button type="submit" style="display:none;"></button>
                 </form>
@@ -57,7 +51,7 @@
             {{if .SearchQuery}}
             <div class="menu">
                 <form action="/collections" method="GET" class="input" style="margin-bottom: 20px;">
-                    <img src="static/assets/search.svg" alt="">
+                    <img src="/static/assets/search.svg" alt="">
                     <input type="text" name="address" placeholder="Contract Address (0x...)" value="{{.SearchQuery}}">
                     <button type="submit" style="display:none;"></button>
                 </form>
@@ -66,11 +60,11 @@
                     <h3>Filters</h3>
 
                     {{if .Error}}
-                    <p style="color: red; font-size: 0.8rem;">{{.Error}}</p>
+                    <p class="error-msg">{{.Error}}</p>
                     {{end}}
 
                     {{if not .Filters}}
-                    <p style="font-size: 0.8rem; color: #aaa;">Enter a valid address to load filters.</p>
+                    <p class="empty-msg">Enter a valid address to load filters.</p>
                     {{end}}
 
                     {{range $traitType, $values := .Filters}}
@@ -97,9 +91,9 @@
 
             <div class="items">
                 {{if not .NFTs}}
-                {{if .SearchQuery}}
-                <p>No NFTs found.</p>
-                {{end}}
+                    {{if .SearchQuery}}
+                    <p class="empty-msg" style="grid-column: 1/-1; text-align: center;">No NFTs found or loading...</p>
+                    {{end}}
                 {{end}}
 
                 {{range .NFTs}}
@@ -111,9 +105,9 @@
                 }'>
                     {{if .Media}}
                     <img src="{{ (index .Media 0).Gateway }}" alt="{{.Title}}"
-                        onerror="this.src='static/assets/placeholder.png'">
+                        onerror="this.src='/static/assets/placeholder.png'">
                     {{else}}
-                    <img src="static/assets/placeholder.png" alt="No image">
+                    <img src="/static/assets/placeholder.png" alt="No image">
                     {{end}}
                     <p>{{if .Title}}{{.Title}}{{else}}#{{.Id.TokenId}}{{end}}</p>
                 </a>
@@ -124,10 +118,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-
-            // --- 1. LOGIQUE ACCORDÉON ---
             const headers = document.querySelectorAll('.filter-header');
-
             headers.forEach(header => {
                 header.addEventListener('click', () => {
                     header.classList.toggle('active');
@@ -136,13 +127,11 @@
                 });
             });
 
-            // --- 2. LOGIQUE DE FILTRAGE ---
             const checkboxes = document.querySelectorAll('.filter-checkbox');
             const items = document.querySelectorAll('.nft-card');
 
             function filterNFTs() {
                 const activeFilters = {};
-
                 checkboxes.forEach(cb => {
                     if (cb.checked) {
                         const type = cb.dataset.traitType;
@@ -155,30 +144,19 @@
                 items.forEach(item => {
                     let metadataRaw = item.dataset.metadata;
                     let nftTraits = {};
-
-                    try {
-                        nftTraits = JSON.parse(metadataRaw);
-                    } catch (e) {
-                        console.error("Erreur parsing JSON pour un NFT", e);
-                        return;
-                    }
+                    try { nftTraits = JSON.parse(metadataRaw); } catch (e) { return; }
 
                     let isVisible = true;
-
                     for (const [traitType, selectedValues] of Object.entries(activeFilters)) {
                         const nftValue = String(nftTraits[traitType]);
-
                         if (!selectedValues.includes(nftValue)) {
                             isVisible = false;
                             break;
                         }
                     }
 
-                    if (isVisible) {
-                        item.classList.remove('hidden');
-                    } else {
-                        item.classList.add('hidden');
-                    }
+                    if (isVisible) item.classList.remove('hidden');
+                    else item.classList.add('hidden');
                 });
             }
 
@@ -187,6 +165,7 @@
             });
         });
     </script>
-</body>
 
+    <script type="module" src="/static/js/wallet.js"></script>
+</body>
 </html>
