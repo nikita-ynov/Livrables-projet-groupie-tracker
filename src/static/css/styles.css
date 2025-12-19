@@ -606,6 +606,10 @@ header ul li a.selected {
     margin-right: 5px;
 }
 
+.collMsg {
+    text-align: center;
+}
+
 /* Filtre */
 .filter-group {
     margin-bottom: 10px;

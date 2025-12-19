@@ -44,9 +44,7 @@
 
             <div class="left">
                 {{if .NFT.Media}}
-                    <img src="{{ (index .NFT.Media 0).Gateway }}" alt="NFT" class="nft-image" onerror="this.src='/static/assets/placeholder.png'">
-                {{else}}
-                    <img src="/static/assets/placeholder.png" alt="NFT" class="nft-image">
+                    <img src="{{ (index .NFT.Media 0).Gateway }}" alt="NFT" class="nft-image">
                 {{end}}
 
                 <div class="nft-basic-info">
