@@ -54,35 +54,37 @@
                     <p>{{.Error}}</p>
                 </div>
             {{else}}
+            <div class="collections">
 
-            <div class="items">
-                {{if not .NFTs}}
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 80px 20px; background: #1e1e1e; border-radius: 16px; border: 1px dashed #333;">
-                        <img src="/static/assets/placeholder.png" alt="Empty" style="width: 80px; opacity: 0.3; margin-bottom: 20px; border-radius: 10px;">
-                        <h3 style="margin-bottom: 10px;">No favorites yet</h3>
-                        <p style="color: #888; margin-bottom: 25px;">Start exploring collections and heart the items you love!</p>
-                        <a href="/collections" class="main__btn">Browse Collections</a>
-                    </div>
-                {{end}}
-
-                {{range .NFTs}}
-                <a href="/item/{{.Contract.Address}}/{{.Id.TokenId}}" class="item">
-                    {{if .Media}}
-                        <img src="{{ (index .Media 0).Gateway }}" alt="{{.Title}}" onerror="this.src='/static/assets/placeholder.png'">
-                    {{else}}
-                        <img src="/static/assets/placeholder.png" alt="No image">
+                <div class="items">
+                    {{if not .NFTs}}
+                        <div >
+                            <img src="/static/assets/placeholder.png" alt="Empty" style="width: 80px; opacity: 0.3; margin-bottom: 20px; border-radius: 10px;">
+                            <h3 style="margin-bottom: 10px;">No favorites yet</h3>
+                            <p style="color: #888; margin-bottom: 25px;">Start exploring collections and heart the items you love!</p>
+                            <a href="/collections" class="main__btn">Browse Collections</a>
+                        </div>
                     {{end}}
-                    
-                    <p style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                            {{if .Title}}{{.Title}}{{else}}Item #{{.Id.TokenId}}{{end}}
-                        </span>
-                        <span style="color: #eb5855;">❤️</span>
-                    </p>
-                </a>
+    
+                    {{range .NFTs}}
+                    <a href="/item/{{.Contract.Address}}/{{.Id.TokenId}}" class="item">
+                        {{if .Media}}
+                            <img src="{{ (index .Media 0).Gateway }}" alt="{{.Title}}" onerror="this.src='/static/assets/placeholder.png'">
+                        {{else}}
+                            <img src="/static/assets/placeholder.png" alt="No image">
+                        {{end}}
+                        
+                        <p style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                {{if .Title}}{{.Title}}{{else}}Item #{{.Id.TokenId}}{{end}}
+                            </span>
+                            <span style="color: #eb5855;">❤️</span>
+                        </p>
+                    </a>
+                    {{end}}
+                </div>
                 {{end}}
             </div>
-            {{end}}
         </div>
     </main>
 
