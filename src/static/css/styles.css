@@ -830,9 +830,11 @@ header ul li a.selected {
     display: flex;
     flex-direction: column;
     gap: 3rem;
+    width: 100%;
+
 }
 
-.pag-container  {
+.pag-container {
     text-align: center;
     display: flex;
     align-items: center;
