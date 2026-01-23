@@ -86,6 +86,7 @@ func fetchNFTsForCollection(contractAddress string) ([]NFT, error) {
 	url := fmt.Sprintf("https://eth-mainnet.g.alchemy.com/nft/v2/%s/getNFTsForCollection?contractAddress=%s&withMetadata=true", apiKey, contractAddress)
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Add("accept", "application/json")
+
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, err
