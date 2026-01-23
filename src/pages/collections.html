@@ -89,30 +89,32 @@
                 </div>
             </div>
             {{end}}
+            <div class="items-container">
 
-            <div class="items">
-                {{if not .NFTs}}
-                {{if .SearchQuery}}
-                <p class="empty-msg" style="grid-column: 1/-1; text-align: center;">No NFTs found or loading...</p>
-                {{end}}
-                {{end}}
-
-                {{range .NFTs}}
-                <a href="/item/{{.Contract.Address}}/{{.Id.TokenId}}" class="item nft-card" data-metadata='{
-                    {{range $i, $a := .Metadata.Attributes}}
-                        {{if $i}},{{end}}
-                        "{{$a.TraitType}}": "{{$a.Value}}"
+                <div class="items">
+                    {{if not .NFTs}}
+                    {{if .SearchQuery}}
+                    <p class="empty-msg" style="grid-column: 1/-1; text-align: center;">No NFTs found or loading...</p>
                     {{end}}
-                }'>
-                    {{if .Media}}
-                    <img src="{{ (index .Media 0).Gateway }}" alt="{{.Title}}"
-                        onerror="this.src='/static/assets/placeholder.png'">
-                    {{else}}
-                    <img src="/static/assets/placeholder.png" alt="No image">
                     {{end}}
-                    <p>{{if .Title}}{{.Title}}{{else}}#{{.Id.TokenId}}{{end}}</p>
-                </a>
-                {{end}}
+    
+                    {{range .NFTs}}
+                    <a href="/item/{{.Contract.Address}}/{{.Id.TokenId}}" class="item nft-card" data-metadata='{
+                        {{range $i, $a := .Metadata.Attributes}}
+                            {{if $i}},{{end}}
+                            "{{$a.TraitType}}": "{{$a.Value}}"
+                        {{end}}
+                    }'>
+                        {{if .Media}}
+                        <img src="{{ (index .Media 0).Gateway }}" alt="{{.Title}}"
+                            onerror="this.src='/static/assets/placeholder.png'">
+                        {{else}}
+                        <img src="/static/assets/placeholder.png" alt="No image">
+                        {{end}}
+                        <p>{{if .Title}}{{.Title}}{{else}}#{{.Id.TokenId}}{{end}}</p>
+                    </a>
+                    {{end}}
+                </div>
                 <div class="pag-container">
 
                     {{if gt .TotalPages 1}}
