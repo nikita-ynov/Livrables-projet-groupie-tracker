@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YNFT - About</title>
+    <title>YNFT - À propos</title>
     <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 
@@ -15,35 +15,162 @@
                 <img src="/static/assets/logo.svg" alt=""> YNFT
             </a>
             <ul>
-                <li><a href="/" class="{{if eq .CurrentPage "home"}}selected{{end}}">Home</a></li>
+                <li><a href="/" class="{{if eq .CurrentPage "home"}}selected{{end}}">Accueil</a></li>
                 <li><a href="/collections" class="{{if eq .CurrentPage "collections"}}selected{{end}}">Collections</a></li>
-                <li><a href="/favorites" class="{{if eq .CurrentPage "favorites"}}selected{{end}}">Favorites</a></li>
-                <li><a href="/about" class="{{if eq .CurrentPage "about"}}selected{{end}}">About</a></li>
+                <li><a href="/favorites" class="{{if eq .CurrentPage "favorites"}}selected{{end}}">Favoris</a></li>
+                <li><a href="/about" class="{{if eq .CurrentPage "about"}}selected{{end}}">À propos</a></li>
                 
                 {{if .UserAddress}}
                     <li>
                         <div class="user-addr-container">
                             <span class="user-addr">● {{.UserAddress}}</span>
-                            <a href="/logout" class="logout-btn" title="Disconnect">×</a>
+                            <a href="/logout" class="logout-btn" title="Déconnexion">×</a>
                         </div>
                     </li>
                 {{else}}
                     <li><a href="/login/test" class="discord-btn">Discord Test</a></li>
-                    <li><button class="login__btn">Connect</button></li>
+                    <li><button class="login__btn">Connexion</button></li>
                 {{end}}
             </ul>
         </div>
     </header>
 
-    <main class="container">
-        <div class="nft-section" style="margin-top: 50px;">
-            <h2>Journal de bord</h2>
-            <p style="margin-top: 15px; line-height: 1.6;">
-                Sur cette page vous allez indiquer le lien vers les maquettes et la liste des taches dans l’ordre que
-                vous les avez exécutées, de plus vous aller indiquer les difficultés auquel vous avez fait face !
-                N’hésitez pas à vous la lâcher c’est votre journal de bord !
+    <main class="container" style="margin-top: 50px;">
+        
+        <!-- Concept -->
+        <div class="about-section">
+            <h2>🧠 Concept du projet</h2>
+            <p>
+                <strong>YNFT</strong> est une plateforme web moderne dédiée à l'exploration et la découverte de NFT. 
+                Notre mission est de simplifier l'accès au monde des NFT en proposant une interface intuitive permettant de :
+            </p>
+            <ul>
+                <li>🔍 Rechercher des collections et ressources NFT</li>
+                <li>🎯 Filtrer par catégories, popularité et autres critères pertinents</li>
+                <li>❤️ Gérer vos favoris personnalisés</li>
+                <li>📊 Consulter les détails complets de chaque NFT</li>
+                <li>🗂️ Navigator facilement par catégories thématiques</li>
+            </ul>
+        </div>
+
+        <!-- Outils -->
+        <div class="about-section">
+            <h2>🛠️ Technologies utilisées</h2>
+            <div class="tech-stack">
+                <span class="tech-badge">Figma - Design</span>
+                <span class="tech-badge">Alchemy API</span>
+                <span class="tech-badge">WalletConnect</span>
+                <span class="tech-badge">Go Backend</span>
+                <span class="tech-badge">HTML/CSS/JS</span>
+            </div>
+            <p style="margin-top: 15px;">
+                Notre stack technique combine les meilleurs outils du web3 pour offrir une expérience utilisateur fluide et sécurisée.
             </p>
         </div>
+
+        <!-- Fonctionnalités -->
+        <div class="about-section">
+            <h2>⚙️ Fonctionnalités principales</h2>
+            
+            <h3>Recherche avancée</h3>
+            <p>Barre de recherche intelligente avec résultats paginés et filtrage en temps réel.</p>
+
+            <h3>Système de filtres</h3>
+            <p>Filtrez vos résultats par catégorie, type de NFT, et divers critères personnalisables.</p>
+
+            <h3>Gestion des favoris</h3>
+            <p>Sauvegardez vos NFT préférés et retrouvez-les facilement dans votre espace personnel.</p>
+
+            <h3>Connexion Wallet</h3>
+            <p>Intégration WalletConnect pour une connexion sécurisée à votre portefeuille crypto.</p>
+        </div>
+
+        <!-- Pages -->
+        <div class="about-section">
+            <h2>📄 Architecture du site</h2>
+            <ul>
+                <li><strong>Page d'accueil</strong> - Vue d'ensemble et collections tendances</li>
+                <li><strong>Page collections</strong> - Liste complète des NFT disponibles</li>
+                <li><strong>Page ressource</strong> - Détails approfondis d'un NFT</li>
+                <li><strong>Page catégorie</strong> - Navigation thématique</li>
+                <li><strong>Page recherche</strong> - Résultats de recherche avancée</li>
+                <li><strong>Page à propos</strong> - Documentation du projet (cette page !)</li>
+            </ul>
+        </div>
+
+        <!-- Roadmap -->
+        <div class="about-section">
+            <h2>✅ Roadmap de développement</h2>
+            <div class="roadmap-item">
+                <strong>Étape 01</strong> - Choix de l'API et préparation des endpoints (tests Postman)
+            </div>
+            <div class="roadmap-item">
+                <strong>Étape 02</strong> - Conception des maquettes sur Figma
+            </div>
+            <div class="roadmap-item">
+                <strong>Étape 03</strong> - Développement du back-end (Go)
+            </div>
+            <div class="roadmap-item">
+                <strong>Étape 04</strong> - Développement du front-end
+            </div>
+            <div class="roadmap-item">
+                <strong>Étape 05</strong> - Intégration et tests
+            </div>
+            <div class="roadmap-item">
+                <strong>Étape 06</strong> - Livraison de l'application web
+            </div>
+        </div>
+
+        <!-- Journal de bord -->
+        <div class="about-section">
+            <h2>📝 Journal de bord</h2>
+            
+            <h3>Maquettes & Design</h3>
+            <a href="#" class="link-btn">📐 Voir les maquettes Figma</a>
+            
+            <h3>Tâches réalisées</h3>
+            <ol>
+                <li>Configuration de l'environnement de développement et structure du projet</li>
+                <li>Intégration de l'API Alchemy et tests des endpoints</li>
+                <li>Création des maquettes UI/UX sur Figma</li>
+                <li>Développement des routes backend et gestion de la base de données</li>
+                <li>Implémentation du système d'authentification WalletConnect</li>
+                <li>Création des templates HTML et styles CSS</li>
+                <li>Développement du système de favoris</li>
+                <li>Mise en place de la recherche et des filtres</li>
+                <li>Tests et débogage</li>
+                <li>Optimisation et finalisation</li>
+            </ol>
+
+            <h3>Défis rencontrés</h3>
+            <ul>
+                <li><strong>Intégration WalletConnect</strong> - Configuration complexe de la connexion wallet et gestion des sessions utilisateur</li>
+                <li><strong>API Alchemy</strong> - Compréhension de la structure des données et optimisation des requêtes pour éviter les limites de rate</li>
+                <li><strong>Gestion des favoris</strong> - Persistance des données côté serveur et synchronisation avec l'interface</li>
+                <li><strong>Responsive design</strong> - Adaptation de l'interface pour tous les types d'écrans</li>
+                <li><strong>Performance</strong> - Optimisation du chargement des images NFT et mise en cache</li>
+            </ul>
+
+            <h3>Solutions apportées</h3>
+            <ul>
+                <li>Utilisation de sessions côté serveur pour la gestion de l'authentification</li>
+                <li>Mise en place d'un système de cache pour les appels API</li>
+                <li>Pagination intelligente pour améliorer les performances</li>
+                <li>Lazy loading des images pour optimiser le temps de chargement</li>
+            </ul>
+        </div>
+
+        <!-- Footer info -->
+        <div class="about-section">
+            <h2>📅 Informations projet</h2>
+            <p><strong>Deadline :</strong> 22/01 à 23h59</p>
+            <p><strong>Type :</strong> Projet étudiant - Application web NFT</p>
+            <p style="margin-top: 20px;">
+                Ce projet a été réalisé dans le cadre de notre formation, avec pour objectif de créer une application 
+                web fonctionnelle et moderne autour de l'écosystème NFT.
+            </p>
+        </div>
+
     </main>
 
     <script type="module" src="/static/js/wallet.js"></script>
