@@ -100,6 +100,8 @@ input::placeholder {
 .input {
     display: flex;
     align-items: center;
+    justify-content: center;
+    text-align: center;
     gap: .5rem;
     width: 100%;
     border-radius: 10px;
@@ -822,4 +824,31 @@ header ul li a.selected {
 
 .link-btn:hover {
     transform: translateY(-2px);
+}
+
+.pag-container  {
+    width: 80vw;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.pagination a {
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: #111;
+    color: #fff;
+    text-decoration: none;
+}
+
+.pagination a.active {
+    background: #6c5ce7;
 }

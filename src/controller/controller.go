@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"html/template"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -63,6 +62,9 @@ type PageData struct {
 	Error       string
 	UserAddress string
 	CurrentPage string // Pour gérer la classe "selected" dans le menu
+
+	Page       int
+	TotalPages int
 }
 
 type LoginRequest struct {
@@ -158,27 +160,39 @@ func renderPage(w http.ResponseWriter, filename string, data any) {
 	}
 
 	var validPath string
-	var found bool
-
 	for _, path := range pathsToCheck {
 		if _, err := os.Stat(path); err == nil {
 			validPath = path
-			found = true
 			break
 		}
 	}
 
-	if !found {
-		log.Println("❌ ERREUR : Fichier HTML introuvable :", filename)
-		http.Error(w, "Fichier introuvable : "+filename, http.StatusInternalServerError)
+	if validPath == "" {
+		http.Error(w, "Template introuvable", http.StatusInternalServerError)
 		return
 	}
 
-	tmpl, err := template.ParseFiles(validPath)
+	funcMap := template.FuncMap{
+		"add": func(a, b int) int { return a + b },
+		"sub": func(a, b int) int { return a - b },
+		"seq": func(from, to int) []int {
+			s := make([]int, 0)
+			for i := from; i <= to; i++ {
+				s = append(s, i)
+			}
+			return s
+		},
+	}
+
+	tmpl, err := template.New(filename).
+		Funcs(funcMap).
+		ParseFiles(validPath)
+
 	if err != nil {
 		http.Error(w, "Erreur Template : "+err.Error(), http.StatusInternalServerError)
 		return
 	}
+
 	tmpl.Execute(w, data)
 }
 
@@ -191,10 +205,23 @@ func Home(w http.ResponseWriter, r *http.Request) {
 
 func Collections(w http.ResponseWriter, r *http.Request) {
 	address := r.URL.Query().Get("address")
+
+	// Page param
+	page := 1
+	if p := r.URL.Query().Get("page"); p != "" {
+		fmt.Sscanf(p, "%d", &page)
+		if page < 1 {
+			page = 1
+		}
+	}
+
+	const perPage = 24
+
 	data := PageData{
 		SearchQuery: address,
 		UserAddress: getUserFromSession(r),
 		CurrentPage: "collections",
+		Page:        page,
 	}
 
 	if address != "" {
@@ -202,10 +229,13 @@ func Collections(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			data.Error = err.Error()
 		} else {
-			data.NFTs = nfts
-			data.Filters = extractFilters(nfts)
+			pagedNFTs, totalPages := paginateNFTs(nfts, page, perPage)
+			data.NFTs = pagedNFTs
+			data.TotalPages = totalPages
+			data.Filters = extractFilters(nfts) // full list for filters
 		}
 	}
+
 	renderPage(w, "collections.html", data)
 }
 
@@ -399,4 +429,25 @@ func verifySignature(walletAddr string, signature string, message string) bool {
 	recoveredAddr := crypto.PubkeyToAddress(*sigPublicKey).Hex()
 	// Correction ici : strings.EqualFold (plus performant et évite le warning jaune)
 	return strings.EqualFold(recoveredAddr, walletAddr)
+}
+
+func paginateNFTs(nfts []NFT, page, perPage int) ([]NFT, int) {
+	total := len(nfts)
+	if total == 0 {
+		return []NFT{}, 0
+	}
+
+	totalPages := (total + perPage - 1) / perPage
+
+	start := (page - 1) * perPage
+	end := start + perPage
+
+	if start > total {
+		return []NFT{}, totalPages
+	}
+	if end > total {
+		end = total
+	}
+
+	return nfts[start:end], totalPages
 }

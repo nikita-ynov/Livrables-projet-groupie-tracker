@@ -15,21 +15,22 @@
                 <img src="/static/assets/logo.svg" alt=""> YNFT
             </a>
             <ul>
-                <li><a href="/" class="{{if eq .CurrentPage "home"}}selected{{end}}">Home</a></li>
-                <li><a href="/collections" class="{{if eq .CurrentPage "collections"}}selected{{end}}">Collections</a></li>
-                <li><a href="/favorites" class="{{if eq .CurrentPage "favorites"}}selected{{end}}">Favorites</a></li>
-                <li><a href="/about" class="{{if eq .CurrentPage "about"}}selected{{end}}">About</a></li>
-                
+                <li><a href="/" class="{{if eq .CurrentPage " home"}}selected{{end}}">Home</a></li>
+                <li><a href="/collections" class="{{if eq .CurrentPage " collections"}}selected{{end}}">Collections</a>
+                </li>
+                <li><a href="/favorites" class="{{if eq .CurrentPage " favorites"}}selected{{end}}">Favorites</a></li>
+                <li><a href="/about" class="{{if eq .CurrentPage " about"}}selected{{end}}">About</a></li>
+
                 {{if .UserAddress}}
-                    <li>
-                        <div class="user-addr-container">
-                            <span class="user-addr">● {{.UserAddress}}</span>
-                            <a href="/logout" class="logout-btn" title="Disconnect">×</a>
-                        </div>
-                    </li>
+                <li>
+                    <div class="user-addr-container">
+                        <span class="user-addr">● {{.UserAddress}}</span>
+                        <a href="/logout" class="logout-btn" title="Disconnect">×</a>
+                    </div>
+                </li>
                 {{else}}
-                    <!-- <li><a href="/login/test" class="discord-btn">Discord Test</a></li> -->
-                    <li><button class="login__btn">Connect</button></li>
+                <li><a href="/login/test" class="discord-btn">Discord Test</a></li>
+                <li><button class="login__btn">Connect</button></li>
                 {{end}}
             </ul>
         </div>
@@ -40,7 +41,7 @@
             {{if not .SearchQuery}}
             <div class="bigSearch">
                 <h2>Search Collection</h2>
-                <form action="/collections" method="GET" class="input" >
+                <form action="/collections" method="GET" class="input">
                     <img src="/static/assets/search.svg" alt="">
                     <input type="text" name="address" placeholder="Contract Address (0x...)" value="{{.SearchQuery}}">
                     <button type="submit" style="display:none;"></button>
@@ -91,9 +92,9 @@
 
             <div class="items">
                 {{if not .NFTs}}
-                    {{if .SearchQuery}}
-                    <p class="empty-msg" style="grid-column: 1/-1; text-align: center;">No NFTs found or loading...</p>
-                    {{end}}
+                {{if .SearchQuery}}
+                <p class="empty-msg" style="grid-column: 1/-1; text-align: center;">No NFTs found or loading...</p>
+                {{end}}
                 {{end}}
 
                 {{range .NFTs}}
@@ -112,7 +113,28 @@
                     <p>{{if .Title}}{{.Title}}{{else}}#{{.Id.TokenId}}{{end}}</p>
                 </a>
                 {{end}}
+                <div class="pag-container">
+
+                    {{if gt .TotalPages 1}}
+                    <div class="pagination">
+                        {{if gt .Page 1}}
+                        <a href="/collections?address={{.SearchQuery}}&page={{sub .Page 1}}">← Prev</a>
+                        {{end}}
+        
+                        {{range $i := seq 1 .TotalPages}}
+                        <a href="/collections?address={{$.SearchQuery}}&page={{$i}}" class="{{if eq $.Page $i}}active{{end}}">
+                            {{$i}}
+                        </a>
+                        {{end}}
+        
+                        {{if lt .Page .TotalPages}}
+                        <a href="/collections?address={{.SearchQuery}}&page={{add .Page 1}}">Next →</a>
+                        {{end}}
+                    </div>
+                    {{end}}
+                </div>
             </div>
+
         </div>
     </main>
 
@@ -168,4 +190,5 @@
 
     <script type="module" src="/static/js/wallet.js"></script>
 </body>
+
 </html>
