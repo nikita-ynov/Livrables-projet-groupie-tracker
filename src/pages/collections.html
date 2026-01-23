@@ -89,6 +89,7 @@
                 </div>
             </div>
             {{end}}
+            {{if .SearchQuery}}
             <div class="items-container">
 
                 <div class="items">
@@ -97,7 +98,7 @@
                     <p class="empty-msg" style="grid-column: 1/-1; text-align: center;">No NFTs found or loading...</p>
                     {{end}}
                     {{end}}
-    
+
                     {{range .NFTs}}
                     <a href="/item/{{.Contract.Address}}/{{.Id.TokenId}}" class="item nft-card" data-metadata='{
                         {{range $i, $a := .Metadata.Attributes}}
@@ -122,13 +123,14 @@
                         {{if gt .Page 1}}
                         <a href="/collections?address={{.SearchQuery}}&page={{sub .Page 1}}">← Prev</a>
                         {{end}}
-        
+
                         {{range $i := seq 1 .TotalPages}}
-                        <a href="/collections?address={{$.SearchQuery}}&page={{$i}}" class="{{if eq $.Page $i}}active{{end}}">
+                        <a href="/collections?address={{$.SearchQuery}}&page={{$i}}"
+                            class="{{if eq $.Page $i}}active{{end}}">
                             {{$i}}
                         </a>
                         {{end}}
-        
+
                         {{if lt .Page .TotalPages}}
                         <a href="/collections?address={{.SearchQuery}}&page={{add .Page 1}}">Next →</a>
                         {{end}}
@@ -136,7 +138,7 @@
                     {{end}}
                 </div>
             </div>
-
+            {{end}}
         </div>
     </main>
 

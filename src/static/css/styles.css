@@ -278,7 +278,6 @@ header ul li a.selected {
     display: flex;
     align-items: center;
     flex-direction: column;
-    margin-left: 10rem;
     gap: 3rem;
 }
 
